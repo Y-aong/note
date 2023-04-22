@@ -1,0 +1,5 @@
+.obsidian
+.idea
+.gitignore
+k8s/.obsidian
+*.png
