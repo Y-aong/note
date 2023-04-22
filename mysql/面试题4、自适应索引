@@ -1,0 +1,56 @@
+### 一、什么是自适应hash索引
+
+自适应Hash索引（Adatptive Hash Index，内部简称AHI）是InnoDB的三大特性之一，还有两个是 Buffer Pool简称BP、双写缓冲区（Doublewrite Buffer）。
+
+1、自适应即我们不需要自己处理，当InnoDB引擎根据查询统计发现某一查询满足hash索引的数据结构特点，就会给其建立一个hash索引；
+
+2、hash索引底层的数据结构是散列表（Hash表），其数据特点就是比较适合在内存中使用，自适应Hash索引存在于InnoDB架构中的缓存中（不存在于磁盘架构中），见下面的InnoDB架构图。
+
+3、自适应hash索引只适合搜索等值的查询，如select * from table where index_col='xxx'，而对于其他查找类型，如范围查找，是不能使用的；
+
+![image-20230416133924934](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20230416133924934.png)
+
+Adaptive Hash Index是针对B+树Search Path的优化，因此所有会涉及到Search Path的操作，均可使用此Hash索引进行优化.
+
+![image-20230416134024990](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20230416134024990.png)
+
+根据索引键值(前缀)快速定位到叶子节点满足条件记录的Offset，减少了B+树Search Path的代价，将B+树从Root节点至Leaf节点的路径定位，优化为Hash Index的快速查询。
+
+
+
+根据索引键值(前缀)快速定位到叶子节点满足条件记录的Offset，减少了B+树Search Path的代价，将B+树从Root节点至Leaf节点的路径定位，优化为Hash Index的快速查询。
+
+InnoDB的自适应Hash索引是默认开启的，可以通过配置下面的参数设置进行关闭。
+
+```
+innodb_adaptive_hash_index = off
+```
+
+自适应Hash索引使用分片进行实现的，分片数可以使用配置参数设置：
+
+```
+innodb_adaptive_hash_index_parts = 8
+```
+
+# 二、hash索引的优缺点
+
+MySQL中索引的常用数据结构有两种: 一种是B+Tree,另一种则是Hash.
+
+哈希索引只包含哈希值和行指针，而不存储字段值，所以不能使用索引中的值来避免读取行。
+
+Hash底层实现是由Hash表来实现的，是根据键值 <key,value> 存储数据的结构。非常适合根据key查找value值，也就是单个key查询，或者说等值查询。
+
+![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/16657/1607287731925286912/07494f5bfaff4208a65c0d7426708b47.png)
+
+对于每一行数据，存储引擎都会对所有的索引列计算一个哈希码，哈希码是一个较小的值,如果出现哈希码值相同的情况会拉出一条链表.
+
+#### 优点
+
+- **适合等值查询。**有哈希冲突的情况下,等值查询访问哈希索引的数据非常快.(如果发生Hash冲突,存储引擎必须遍历链表中的所有行指针,逐行进行比较,直到找到所有符合条件的行).
+
+#### 缺点
+
+- 不支持排序和范围列查找
+  - 不是按照索引值进行存储的，无法用于排序和范围
+- 会出现hash冲突
+  - 如果发生Hash冲突,存储引擎必须遍历链表中的所有行指针,逐行进行比较,直到找到所有符合条件的行

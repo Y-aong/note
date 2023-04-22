@@ -1,0 +1,45 @@
+## 什么是写失效
+
+### 原因
+
+InnoDB的页和操作系统的页大小不一致，InnoDB页大小一般为16K，操作系统页大小为4K，InnoDB的页写入到磁盘时，一个页需要分4次写。
+
+如果存储引擎正在写入页的数据到磁盘时发生了宕机，可能出现页只写了一部分的情况，比如只写了4K，就宕机了，这种情况叫做部分写失效（partial page write），可能会导致数据丢失。
+
+
+
+![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/16657/1672133064003/186aaf40085542d5a790025d9577b34d.png)
+
+### 双写缓冲区` Doublewrite Buffer`
+
+为了解决写失效问题，InnoDB实现了double write buffer Files, 它位于系统表空间，是一个存储区域。
+
+在BufferPool的page页刷新到磁盘真正的位置前，会先将数据存在Doublewrite 缓冲区。这样在宕机重启时，如果出现数据页损坏，那么在应用redo log之前，需要通过该页的副本来还原该页，然后再进行redo log重做，double write实现了InnoDB引擎数据页的可靠性.
+
+默认情况下启用双写缓冲区，如果要禁用Doublewrite 缓冲区，可以将 `innodb_doublewrite`设置为0。
+
+```sql
+mysql> show variables like '%innodb_doublewrite%';
++--------------------+-------+
+| Variable_name      | Value |
++--------------------+-------+
+| innodb_doublewrite | ON    |
++--------------------+-------+
+1 row in set (0.01 sec)
+```
+
+数据双写流程
+
+![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/16657/1672133064003/a31680a18f104e0da3f3cb6c1aa71866.png)
+
+* **step1**：当进行缓冲池中的脏页刷新到磁盘的操作时,并不会直接写磁盘,每次脏页刷新必须要先写double write .
+* **step2**：通过memcpy函数将脏页复制到内存中的double write buffer .
+* **step3**:  double write buffer再分两次、每次1MB, 顺序写入共享表空间的物理磁盘上, **第一次写**.
+* **step4**:  在完成double write页的写入后，再将double wirite buffer中的页写入各个表的**独立表空间**文件中(数据文件 .ibd), **第二次写**。
+
+**为什么写两次 ?**
+
+可能有的同学会有疑问，为啥写两次，刷一次数据文件保存数据不就可以了，为什么还要写共享表空间 ?其实是因为共享表空间是在ibdbata文件中划出2M连续的空间，专门给double write刷脏页用的, 由于在这个过程中，**double write页的存储是连续的，因此写入磁盘为顺序写，性能很高**；完成double write后，再将脏页写入实际的各个表空间文件，这时写入就是离散的了.
+
+## 什么是行溢出
+
