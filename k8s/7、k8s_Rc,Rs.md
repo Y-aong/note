@@ -41,7 +41,12 @@ ReplicationController (RC)用来确保[容器](https://cloud.tencent.com/product
 - 多 Deployment 动态更新
 
   ```
-  假设创建一个 Deployment 以创建 nginx:1.7.9 的 5 个副本，然后更新 Deployment 以创建 5 个 nginx:1.9.1 的副本，而此时只有 3 个nginx:1.7.9 的副本已创建。在这种情况下， Deployment 会立即开始杀死3个 nginx:1.7.9 Pods，并开始创建 nginx:1.9.1 Pods。它不等待 nginx:1.7.9 的 5 个副本完成后再更新为nginx:1.9.1。
+  假设创建一个 Deployment 以创建 nginx:1.7.9 的 5 个副本，
+  然后更新 Deployment 以创建 5 个 nginx:1.9.1 的副本，
+  而此时只有 3 个nginx:1.7.9 的副本已创建。在这种情况下，
+  Deployment 会立即开始杀死3个 nginx:1.7.9 Pods，并
+  开始创建 nginx:1.9.1 Pods。它不等待nginx:1.7.9的 5
+  个副本完成后再更新为nginx:1.9.1。
   ```
 
   
