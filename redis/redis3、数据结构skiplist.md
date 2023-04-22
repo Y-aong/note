@@ -6,7 +6,7 @@ skiplist是一种以空间换取时间的结构。由于链表，无法进行二
 
 ### 跳表的实现
 
-![image-20230422100426672](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20230422100426672.png)
+![image-20230422100426672](https://s2.loli.net/2023/04/22/puRBJ5FzgoIAkbZ.png)
 
 ### 复杂度
 

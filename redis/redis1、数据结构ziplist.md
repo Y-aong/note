@@ -2,7 +2,7 @@
 
 ziplist是一个经过特殊编码的双向链表，它不存储指向上一个链表节点和指向下一个链表节点的指针，而是存储上一个节点长度和当前节点长度，通过牺牲部分读写性能，来换取高效的内存空间利用率，节约内存，是一种时间换空间的思想。只用在字段个数少，字段值小的场景里面
 
-![image-20230422094056447](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20230422094056447.png)
+![image-20230422094056447.png](https://s2.loli.net/2023/04/22/neEhItwyrRLOikC.png)
 
 ### 优点
 
@@ -32,7 +32,7 @@ ziplist是一个经过特殊编码的双向链表，它不存储指向上一个�
 enncoding：记录节点的content保存数据的类型和长度。
 content：保存实际数据内容
 
-![图像](E:\思维导图\图像.png)
+![图像.png](https://s2.loli.net/2023/04/22/qY9yOVZ4rRATgtQ.png)
 
 ### hash的是实现方式之一
 

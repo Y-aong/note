@@ -20,7 +20,7 @@ Redis基于Reactor模式开发了网络事件处理器，这个处理器被称�
 
 因为文件事件分派器队列的消费是单线程的，所以Redis才叫单线程模型
 
-**![image-20230422110029407](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20230422110029407.png)**
+**![image-20230422110029407](https://s2.loli.net/2023/04/22/MrW3yL7pEquRjnP.png)**
 
 ### 名称解释
 
@@ -47,7 +47,7 @@ Redis基于Reactor模式开发了网络事件处理器，这个处理器被称�
 
 Reactor 模式，是指通过一个或多个输入同时传递给服务处理器的服务请求的事件驱动处理模式。服务端程序处理传入多路请求，并将它们同步分派给请求对应的处理线程，Reactor 模式也叫 Dispatcher 模式。即 I/O 多了复用统一监听事件，收到事件后分发(Dispatch 给某进程)，是编写高性能网络服务器的必备技术。
 
-![image-20230422110407573](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20230422110407573.png)
+![image-20230422110407573]( https://s2.loli.net/2023/04/22/sUxJXTqkbZEWNgD.png)
 
 Reactor 模式中有 2 个关键组成：
 1）Reactor：Reactor 在一个单独的线程中运行，负责监听和分发事件，分发给适当的处理程序来对 IO 事件做出反应。 它就像公司的电话接线员，它接听来自客户的电话并将线路转移到适当的联系人；

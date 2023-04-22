@@ -51,8 +51,6 @@
 * 共享锁只能兼容共享锁, 不兼容排它锁
 * 排它锁互斥共享锁和其它排它锁
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/16657/1672984425088/8c5348a34dad4631a3113a75b7b6fcf5.png)
-
 ### 三、行锁是如何实现
 
 I**nnoDB行锁是通过对索引数据页上的记录加锁实现的**，主要实现算法有 3 种：Record Lock、Gap Lock 和 Next-key Lock。

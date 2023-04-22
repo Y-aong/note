@@ -6,7 +6,7 @@ JOIN 是 MySQL 用来进行联表操作的，用来匹配两个表的数据，�
 
 JOIN 操作有多种方式，取决于最终数据的合并效果。常用连接方式的有以下几种:
 
-![image.png](https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/16657/1672133064003/55df110a70d9450283a9a2bf0269e2b1.png)
+<img src="https://fynotefile.oss-cn-zhangjiakou.aliyuncs.com/fynote/fyfile/16657/1672133064003/55df110a70d9450283a9a2bf0269e2b1.png" alt="image.png" style="zoom: 80%;" />
 
 ### 什么是驱动表 ?
 

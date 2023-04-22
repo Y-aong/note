@@ -20,7 +20,7 @@ redis的高QPS特性,可以很好的解决查数据库很慢的问题。但是�
   设置两个redis缓存值，两个缓冲设置不同的过期时间，然后利用定时任务主动刷新缓存，当其中一个缓冲过期后，立马查询另外一个缓冲数据这样可以有效的避免缓冲击穿的现象
   ```
 
-  ![image-20230422104209647](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20230422104209647.png)
+  ![image-20230422104209647]( https://s2.loli.net/2023/04/22/Fd7nLi3N6eWGpDl.png)
 
 ### 注意点
 

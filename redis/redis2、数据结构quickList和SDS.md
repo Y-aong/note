@@ -2,7 +2,7 @@
 
 list用quicklist来存储，quicklist存储了一个双向链表，每个节点都是一个ziplist
 
-<img src="C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20230422095224274.png" alt="image-20230422095224274" style="zoom:80%;" />
+![img](https://hunter-image.oss-cn-beijing.aliyuncs.com/redis/quicklist/QuickList.png)
 
 
 在低版本的Redis中，list采用的底层数据结构是ziplist+linkedList；

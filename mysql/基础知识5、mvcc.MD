@@ -8,13 +8,15 @@
 
 ```
 * MVCC，多版本并发控制, 用于实现**读已提交**和**可重复读**隔离级别。
-* MVCC的核心就是 Undo log多版本链 + Read view，“MV”就是通过 Undo log来保存数据的历史版本，实现多版本的管理，“CC”是通过 Read-view来实现管理，通过 Read-view原则来决定数据是否显示。同时针对不同的隔离级别， Read view的生成策略不同，也就实现了不同的隔离级别。
+* MVCC的核心就是 Undo log多版本链 + Read view，
+“MV”就是通过 Undo log来保存数据的历史版本，实现多版本的管理，
+“CC”是通过 Read-view来实现管理，
+通过 Read-view原则来决定数据是否显示。同时针对不同的隔离级别， Read view的生成策略不同，也就实现了不同的隔离级别。
 ```
 
 ### 行记录的三个隐藏字段
 
-![image-20230416192111694](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20230416192111694.png)
-
+![image-20230416192111694.png](https://s2.loli.net/2023/04/22/tQedqUhPokiJpXw.png)
 - DB_ROW_ID：  一般为表的定义的主键，表中也没有定义唯一索引，innodb会自动为表添加一个row_id的隐藏列作为主键
 - DB_TRX_ID ：事务对于某条记录做增删改操作时，会将这个事务的id写到trx_id中
 - DB_ROLL_PTR: 回滚指针,指向undo log的指针
@@ -23,8 +25,7 @@
 
 每一条数据都有多个版本,版本之间通过undo log链条进行连接
 
-![image-20230416193055777](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20230416193055777.png)
-
+![image-20230416193055777.png](https://s2.loli.net/2023/04/22/mvyo8qjAarbfNzR.png)
 ### ReadView
 
 Read View是 InnoDB 在实现 MVCC 时用到的一致性读视图，即 consistent read view，用于支持 RC（Read Committed，读提交）和 RR（Repeatable Read，可重复读）隔离级别的实现.

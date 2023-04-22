@@ -69,7 +69,7 @@ A线程先删除缓存数据，再去更新mysql，此时来了一个请求B线�
 
 #### 解决方案
 
-![image-20230422140030329](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20230422140030329.png)
+![image-20230422140030329](https://s2.loli.net/2023/04/22/pY6rVoqT5UZSB8G.png)
 
 总结来说
 
