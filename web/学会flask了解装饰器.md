@@ -1,5 +1,18 @@
 ## 装饰器
 
+为什么flask关系到装饰器
+
+```python
+@api.route('', methods=["GET"])
+@auth.login_required
+def get_user():
+    uid = g.user.uid
+    user = User.query.filter_by(id=uid).first_or_404_for_api()
+    return jsonify(user)
+```
+
+
+
 定义：装饰器可以在不改变原有代码的基础上，引用源代码的变量和返回值从而可以改变源代码的行为。
 
 ### 一、简单示例

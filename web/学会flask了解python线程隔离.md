@@ -1,4 +1,6 @@
-### Flask中的线程隔离
+## Flask中的线程隔离
+
+**问题：flask中会接收多个请求，那他们不会搞混吗？**
 
 Flask内部，通过维护一个dict来实现线程隔离。伪代码如下 request={thread_key1:Request1,thread_key2:Request2} 其中thread_key是线程的唯一id号，Request就是每次请求的Request对象
 

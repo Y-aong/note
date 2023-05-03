@@ -1,3 +1,76 @@
+## python上下文
+
+例子，如果你想在flask中直接使用db,你会得到一个经典错误
+
+```python
+from app.models.base import db
+from app.models.user import User
+
+with db.auto_commit():
+    user = User()
+    user.nickname = "super"
+    user.password = "123456"
+    user.email = "super@qq.com"
+    user.auth = 2
+    db.session.add(user)
+#RuntimeError: No application found. Either work inside a view function or push an application context.
+```
+
+请看源码
+
+```python
+class AppContext(object):
+    """The application context binds an application object implicitly
+    to the current thread or greenlet, similar to how the
+    :class:`RequestContext` binds request information.  The application
+    context is also implicitly created if a request context is created
+    but the application is not on top of the individual application
+    context.
+    """
+
+    def __init__(self, app):
+        self.app = app
+        self.url_adapter = app.create_url_adapter(None)
+        self.g = app.app_ctx_globals_class()
+
+        # Like request context, app contexts can be pushed multiple times
+        # but there a basic "refcount" is enough to track them.
+        self._refcnt = 0
+
+    def push(self):
+        """Binds the app context to the current context."""
+        self._refcnt += 1
+        if hasattr(sys, "exc_clear"):
+            sys.exc_clear()
+        _app_ctx_stack.push(self)
+        appcontext_pushed.send(self.app)
+
+    def pop(self, exc=_sentinel):
+        """Pops the app context."""
+        try:
+            self._refcnt -= 1
+            if self._refcnt <= 0:
+                if exc is _sentinel:
+                    exc = sys.exc_info()[1]
+                self.app.do_teardown_appcontext(exc)
+        finally:
+            rv = _app_ctx_stack.pop()
+        assert rv is self, "Popped wrong app context.  (%r instead of %r)" % (rv, self)
+        appcontext_popped.send(self.app)
+
+    def __enter__(self):
+        self.push()
+        return self
+
+    def __exit__(self, exc_type, exc_value, tb):
+        self.pop(exc_value)
+
+        if BROKEN_PYPY_CTXMGR_EXIT and exc_type is not None:
+            reraise(exc_type, exc_value, tb)
+```
+
+AppContext是个上下文
+
 **一、什么是with 上下文语句**
 
 - with 语句用于管理上下文语句，可以使用with作为上下文管理器
