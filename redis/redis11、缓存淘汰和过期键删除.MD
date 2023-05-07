@@ -3,17 +3,17 @@
 - redis 默认的内存是多少？在哪里查看？如何设置和修改？
 
   ```
-  查看redis最大占用内存？
+  查看redis最大占用内存？  config get maxmemory
   打开redis配置文件，设置maxmemory参数，maxmemory是bytes字节类型，注意转换。
   
-  redis默认内存多少可用？
+  redis默认内存多少可用？ redis.h 里我们可以看到最大可用内存 REDIS_DEFAULT_MAXMEMORY 的默认值是0，即最大可用内存默认没有设置最大值
   64系统下不限制内存大小，32位操作系统最多可以使用3G
   
   生产环境如何设置？
   设置为内存为最大内存的3/4
   
-  什么命令查看redis的内存使用情况？
-  info memory
+  什么命令查看redis的内存使用情况？ info memory
+  
   ```
 
   
